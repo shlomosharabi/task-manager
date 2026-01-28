@@ -1,658 +1,691 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="he" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#667eea">
-    <meta name="description" content="מנהל משימות חכם ומעוצב">
-    <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="icon-192.png">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#667eea" />
+    <meta name="description" content="מנהל משימות חכם ומעוצב" />
+    <link rel="manifest" href="manifest.json" />
+    <link rel="apple-touch-icon" href="icon-192.png" />
     <title>מנהל המשימות שלי ✨</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu,
+          Cantarell, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px;
+      }
 
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-        }
+      .container {
+        max-width: 900px;
+        margin: 0 auto;
+      }
 
-        .header {
-            text-align: center;
-            color: white;
-            margin-bottom: 30px;
-        }
+      .header {
+        text-align: center;
+        color: white;
+        margin-bottom: 30px;
+      }
 
+      .header h1 {
+        font-size: 2.5em;
+        margin-bottom: 10px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+      }
+
+      .header p {
+        font-size: 1.1em;
+        opacity: 0.9;
+      }
+
+      .main-card {
+        background: white;
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      }
+
+      .date-selector {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 25px;
+        flex-wrap: wrap;
+      }
+
+      .date-selector select {
+        flex: 1;
+        min-width: 120px;
+        padding: 12px;
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        font-size: 16px;
+        background: white;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .date-selector select:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      }
+
+      .add-task-section {
+        margin-bottom: 25px;
+      }
+
+      .task-input-group {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 15px;
+      }
+
+      .task-input {
+        flex: 1;
+        padding: 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        font-size: 16px;
+        transition: all 0.3s;
+      }
+
+      .task-input:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      }
+
+      .btn {
+        padding: 15px 30px;
+        border: none;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .btn-add {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+      }
+
+      .btn-add:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+      }
+
+      .btn-add:active {
+        transform: translateY(0);
+      }
+
+      .stats {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 25px;
+        flex-wrap: wrap;
+      }
+
+      .stat-card {
+        flex: 1;
+        min-width: 150px;
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        color: white;
+        padding: 20px;
+        border-radius: 15px;
+        text-align: center;
+      }
+
+      .stat-card.completed {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      }
+
+      .stat-card h3 {
+        font-size: 2em;
+        margin-bottom: 5px;
+      }
+
+      .stat-card p {
+        opacity: 0.9;
+        font-size: 0.9em;
+      }
+
+      .tasks-list {
+        max-height: 500px;
+        overflow-y: auto;
+      }
+
+      .task-item {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        transition: all 0.3s;
+        border: 2px solid transparent;
+      }
+
+      .task-item:hover {
+        transform: translateX(-5px);
+        border-color: #667eea;
+      }
+
+      .task-item.completed {
+        background: #e8f5e9;
+        opacity: 0.8;
+      }
+
+      .task-checkbox {
+        width: 24px;
+        height: 24px;
+        cursor: pointer;
+      }
+
+      .task-text {
+        flex: 1;
+        font-size: 16px;
+      }
+
+      .task-item.completed .task-text {
+        text-decoration: line-through;
+        color: #666;
+      }
+
+      .task-time {
+        color: #666;
+        font-size: 14px;
+      }
+
+      .btn-delete {
+        background: #ff6b6b;
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .btn-delete:hover {
+        background: #ff5252;
+        transform: scale(1.05);
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: #999;
+      }
+
+      .empty-state-icon {
+        font-size: 4em;
+        margin-bottom: 20px;
+      }
+
+      .empty-state h3 {
+        font-size: 1.5em;
+        margin-bottom: 10px;
+      }
+
+      .feedback {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%) translateY(-100px);
+        background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        color: white;
+        padding: 20px 30px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        font-size: 18px;
+        font-weight: bold;
+        z-index: 1000;
+        transition: transform 0.5s ease;
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .feedback.show {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+      }
+
+      .current-date-display {
+        background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+        padding: 15px;
+        border-radius: 10px;
+        text-align: center;
+        margin-bottom: 20px;
+        font-weight: bold;
+        color: #333;
+        font-size: 1.1em;
+      }
+
+      @media (max-width: 600px) {
         .header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-        }
-
-        .header p {
-            font-size: 1.1em;
-            opacity: 0.9;
+          font-size: 2em;
         }
 
         .main-card {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-        }
-
-        .date-selector {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 25px;
-            flex-wrap: wrap;
-        }
-
-        .date-selector select {
-            flex: 1;
-            min-width: 120px;
-            padding: 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 16px;
-            background: white;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .date-selector select:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-
-        .add-task-section {
-            margin-bottom: 25px;
+          padding: 20px;
         }
 
         .task-input-group {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        .task-input {
-            flex: 1;
-            padding: 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 16px;
-            transition: all 0.3s;
-        }
-
-        .task-input:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+          flex-direction: column;
         }
 
         .btn {
-            padding: 15px 30px;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s;
+          width: 100%;
         }
+      }
 
-        .btn-add {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
+      /* Install prompt */
+      .install-prompt {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: white;
+        padding: 15px 25px;
+        border-radius: 15px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        display: none;
+        align-items: center;
+        gap: 15px;
+        z-index: 1000;
+        max-width: 90%;
+      }
 
-        .btn-add:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-        }
+      .install-prompt.show {
+        display: flex;
+      }
 
-        .btn-add:active {
-            transform: translateY(0);
-        }
+      .install-prompt button {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+      }
 
-        .stats {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 25px;
-            flex-wrap: wrap;
-        }
-
-        .stat-card {
-            flex: 1;
-            min-width: 150px;
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 15px;
-            text-align: center;
-        }
-
-        .stat-card.completed {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-        }
-
-        .stat-card h3 {
-            font-size: 2em;
-            margin-bottom: 5px;
-        }
-
-        .stat-card p {
-            opacity: 0.9;
-            font-size: 0.9em;
-        }
-
-        .tasks-list {
-            max-height: 500px;
-            overflow-y: auto;
-        }
-
-        .task-item {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            transition: all 0.3s;
-            border: 2px solid transparent;
-        }
-
-        .task-item:hover {
-            transform: translateX(-5px);
-            border-color: #667eea;
-        }
-
-        .task-item.completed {
-            background: #e8f5e9;
-            opacity: 0.8;
-        }
-
-        .task-checkbox {
-            width: 24px;
-            height: 24px;
-            cursor: pointer;
-        }
-
-        .task-text {
-            flex: 1;
-            font-size: 16px;
-        }
-
-        .task-item.completed .task-text {
-            text-decoration: line-through;
-            color: #666;
-        }
-
-        .task-time {
-            color: #666;
-            font-size: 14px;
-        }
-
-        .btn-delete {
-            background: #ff6b6b;
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .btn-delete:hover {
-            background: #ff5252;
-            transform: scale(1.05);
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: #999;
-        }
-
-        .empty-state-icon {
-            font-size: 4em;
-            margin-bottom: 20px;
-        }
-
-        .empty-state h3 {
-            font-size: 1.5em;
-            margin-bottom: 10px;
-        }
-
-        .feedback {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%) translateY(-100px);
-            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
-            color: white;
-            padding: 20px 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            font-size: 18px;
-            font-weight: bold;
-            z-index: 1000;
-            transition: transform 0.5s ease;
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .feedback.show {
-            transform: translateX(-50%) translateY(0);
-            opacity: 1;
-        }
-
-        .current-date-display {
-            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
-            padding: 15px;
-            border-radius: 10px;
-            text-align: center;
-            margin-bottom: 20px;
-            font-weight: bold;
-            color: #333;
-            font-size: 1.1em;
-        }
-
-        @media (max-width: 600px) {
-            .header h1 {
-                font-size: 2em;
-            }
-
-            .main-card {
-                padding: 20px;
-            }
-
-            .task-input-group {
-                flex-direction: column;
-            }
-
-            .btn {
-                width: 100%;
-            }
-        }
-
-        /* Install prompt */
-        .install-prompt {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: white;
-            padding: 15px 25px;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
-            display: none;
-            align-items: center;
-            gap: 15px;
-            z-index: 1000;
-            max-width: 90%;
-        }
-
-        .install-prompt.show {
-            display: flex;
-        }
-
-        .install-prompt button {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        .install-prompt .close-btn {
-            background: #e0e0e0;
-            color: #333;
-            padding: 5px 10px;
-        }
+      .install-prompt .close-btn {
+        background: #e0e0e0;
+        color: #333;
+        padding: 5px 10px;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="container">
-        <div class="header">
-            <h1>מנהל המשימות שלי ✨</h1>
-            <p>ארגן את היום שלך בקלות ובסטייל!</p>
+      <div class="header">
+        <h1>מנהל המשימות שלי ✨</h1>
+        <p>ארגן את היום שלך בקלות ובהנאה!</p>
+      </div>
+
+      <div class="main-card">
+        <div class="current-date-display" id="currentDateDisplay"></div>
+
+        <div class="date-selector">
+          <select id="yearSelect"></select>
+          <select id="monthSelect"></select>
+          <select id="daySelect"></select>
         </div>
 
-        <div class="main-card">
-            <div class="current-date-display" id="currentDateDisplay"></div>
-
-            <div class="date-selector">
-                <select id="yearSelect"></select>
-                <select id="monthSelect"></select>
-                <select id="daySelect"></select>
-            </div>
-
-            <div class="add-task-section">
-                <div class="task-input-group">
-                    <input 
-                        type="text" 
-                        class="task-input" 
-                        id="taskInput" 
-                        placeholder="מה תרצה להוסיף להיום? 🎯"
-                        onkeypress="if(event.key === 'Enter') addTask()"
-                    >
-                    <button class="btn btn-add" onclick="addTask()">הוסף משימה</button>
-                </div>
-            </div>
-
-            <div class="stats">
-                <div class="stat-card">
-                    <h3 id="totalTasks">0</h3>
-                    <p>סך הכל משימות</p>
-                </div>
-                <div class="stat-card completed">
-                    <h3 id="completedTasks">0</h3>
-                    <p>משימות שהושלמו</p>
-                </div>
-            </div>
-
-            <div class="tasks-list" id="tasksList"></div>
+        <div class="add-task-section">
+          <div class="task-input-group">
+            <input
+              type="text"
+              class="task-input"
+              id="taskInput"
+              placeholder="מה תרצה להוסיף להיום? 🎯"
+              onkeypress="if (event.key === 'Enter') addTask();"
+            />
+            <button class="btn btn-add" onclick="addTask()">הוסף משימה</button>
+          </div>
         </div>
+
+        <div class="stats">
+          <div class="stat-card">
+            <h3 id="totalTasks">0</h3>
+            <p>סך הכל משימות</p>
+          </div>
+          <div class="stat-card completed">
+            <h3 id="completedTasks">0</h3>
+            <p>משימות שהושלמו</p>
+          </div>
+        </div>
+
+        <div class="tasks-list" id="tasksList"></div>
+      </div>
     </div>
 
     <div class="feedback" id="feedback"></div>
 
     <div class="install-prompt" id="installPrompt">
-        <span>📱 התקן את האפליקציה למסך הבית</span>
-        <button onclick="installApp()">התקן</button>
-        <button class="close-btn" onclick="closeInstallPrompt()">×</button>
+      <span>📱 התקן את האפליקציה למסך הבית</span>
+      <button onclick="installApp()">התקן</button>
+      <button class="close-btn" onclick="closeInstallPrompt()">×</button>
     </div>
 
     <script>
-        // PWA Installation
-        let deferredPrompt;
+      // PWA Installation
+      let deferredPrompt;
 
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            document.getElementById('installPrompt').classList.add('show');
+      window.addEventListener("beforeinstallprompt", (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        document.getElementById("installPrompt").classList.add("show");
+      });
+
+      async function installApp() {
+        if (!deferredPrompt) {
+          return;
+        }
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        console.log(`User response: ${outcome}`);
+        deferredPrompt = null;
+        document.getElementById("installPrompt").classList.remove("show");
+      }
+
+      function closeInstallPrompt() {
+        document.getElementById("installPrompt").classList.remove("show");
+      }
+
+      // Register Service Worker
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker
+          .register("service-worker.js")
+          .then((reg) => console.log("Service Worker registered", reg))
+          .catch((err) =>
+            console.log("Service Worker registration failed", err),
+          );
+      }
+
+      // Initialize storage
+      let tasks = JSON.parse(localStorage.getItem("tasks")) || {};
+      let currentYear, currentMonth, currentDay;
+      let feedbackTimeout;
+
+      // Initialize date selectors
+      function initializeDateSelectors() {
+        const today = new Date();
+        currentYear = today.getFullYear();
+        currentMonth = today.getMonth() + 1;
+        currentDay = today.getDate();
+
+        // Populate year selector (current year ± 5 years)
+        const yearSelect = document.getElementById("yearSelect");
+        for (let i = currentYear - 5; i <= currentYear + 5; i++) {
+          const option = document.createElement("option");
+          option.value = i;
+          option.textContent = i;
+          if (i === currentYear) option.selected = true;
+          yearSelect.appendChild(option);
+        }
+
+        // Populate month selector
+        const monthSelect = document.getElementById("monthSelect");
+        const months = [
+          "ינואר",
+          "פברואר",
+          "מרץ",
+          "אפריל",
+          "מאי",
+          "יוני",
+          "יולי",
+          "אוגוסט",
+          "ספטמבר",
+          "אוקטובר",
+          "נובמבר",
+          "דצמבר",
+        ];
+        months.forEach((month, index) => {
+          const option = document.createElement("option");
+          option.value = index + 1;
+          option.textContent = month;
+          if (index + 1 === currentMonth) option.selected = true;
+          monthSelect.appendChild(option);
         });
 
-        async function installApp() {
-            if (!deferredPrompt) {
-                return;
-            }
-            deferredPrompt.prompt();
-            const { outcome } = await deferredPrompt.userChoice;
-            console.log(`User response: ${outcome}`);
-            deferredPrompt = null;
-            document.getElementById('installPrompt').classList.remove('show');
+        updateDaySelector();
+
+        // Add event listeners
+        yearSelect.addEventListener("change", () => {
+          currentYear = parseInt(yearSelect.value);
+          updateDaySelector();
+          loadTasks();
+        });
+
+        monthSelect.addEventListener("change", () => {
+          currentMonth = parseInt(monthSelect.value);
+          updateDaySelector();
+          loadTasks();
+        });
+
+        document.getElementById("daySelect").addEventListener("change", (e) => {
+          currentDay = parseInt(e.target.value);
+          loadTasks();
+        });
+      }
+
+      function updateDaySelector() {
+        const daySelect = document.getElementById("daySelect");
+        daySelect.innerHTML = "";
+
+        const daysInMonth = new Date(currentYear, currentMonth, 0).getDate();
+
+        for (let i = 1; i <= daysInMonth; i++) {
+          const option = document.createElement("option");
+          option.value = i;
+          option.textContent = i;
+          if (i === currentDay && currentDay <= daysInMonth) {
+            option.selected = true;
+          }
+          daySelect.appendChild(option);
         }
 
-        function closeInstallPrompt() {
-            document.getElementById('installPrompt').classList.remove('show');
+        if (currentDay > daysInMonth) {
+          currentDay = daysInMonth;
+          daySelect.value = currentDay;
         }
 
-        // Register Service Worker
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('service-worker.js')
-                .then(reg => console.log('Service Worker registered', reg))
-                .catch(err => console.log('Service Worker registration failed', err));
+        updateCurrentDateDisplay();
+      }
+
+      function updateCurrentDateDisplay() {
+        const months = [
+          "ינואר",
+          "פברואר",
+          "מרץ",
+          "אפריל",
+          "מאי",
+          "יוני",
+          "יולי",
+          "אוגוסט",
+          "ספטמבר",
+          "אוקטובר",
+          "נובמבר",
+          "דצמבר",
+        ];
+        const days = ["ראשון", "שני", "שלישי", "רביעי", "חמישי", "שישי", "שבת"];
+
+        const date = new Date(currentYear, currentMonth - 1, currentDay);
+        const dayName = days[date.getDay()];
+
+        document.getElementById("currentDateDisplay").textContent =
+          `יום ${dayName}, ${currentDay} ב${months[currentMonth - 1]} ${currentYear}`;
+      }
+
+      function getDateKey() {
+        return `${currentYear}-${String(currentMonth).padStart(2, "0")}-${String(currentDay).padStart(2, "0")}`;
+      }
+
+      function addTask() {
+        const input = document.getElementById("taskInput");
+        const taskText = input.value.trim();
+
+        if (!taskText) {
+          showFeedback("אופס! כתוב משהו קודם 😊", "#ff6b6b");
+          return;
         }
 
-        // Initialize storage
-        let tasks = JSON.parse(localStorage.getItem('tasks')) || {};
-        let currentYear, currentMonth, currentDay;
-        let feedbackTimeout;
+        const dateKey = getDateKey();
+        if (!tasks[dateKey]) {
+          tasks[dateKey] = [];
+        }
 
-        // Initialize date selectors
-        function initializeDateSelectors() {
-            const today = new Date();
-            currentYear = today.getFullYear();
-            currentMonth = today.getMonth() + 1;
-            currentDay = today.getDate();
+        const task = {
+          id: Date.now(),
+          text: taskText,
+          completed: false,
+          createdAt: new Date().toISOString(),
+        };
 
-            // Populate year selector (current year ± 5 years)
-            const yearSelect = document.getElementById('yearSelect');
-            for (let i = currentYear - 5; i <= currentYear + 5; i++) {
-                const option = document.createElement('option');
-                option.value = i;
-                option.textContent = i;
-                if (i === currentYear) option.selected = true;
-                yearSelect.appendChild(option);
-            }
+        tasks[dateKey].push(task);
+        saveTasks();
+        input.value = "";
+        loadTasks();
 
-            // Populate month selector
-            const monthSelect = document.getElementById('monthSelect');
-            const months = [
-                'ינואר', 'פברואר', 'מרץ', 'אפריל', 'מאי', 'יוני',
-                'יולי', 'אוגוסט', 'ספטמבר', 'אוקטובר', 'נובמבר', 'דצמבר'
+        const encouragements = [
+          "כל הכבוד! משימה חדשה נוספה 🎉",
+          "מעולה! עוד צעד לקראת ההצלחה 🌟",
+          "יפה מאוד! המשך ככה 💪",
+          "אתה מדהים! המשימה נוספה ✨",
+          "נהדר! יום פרודוקטיבי מחכה לך 🚀",
+        ];
+        showFeedback(
+          encouragements[Math.floor(Math.random() * encouragements.length)],
+        );
+      }
+
+      function toggleTask(taskId) {
+        const dateKey = getDateKey();
+        const task = tasks[dateKey].find((t) => t.id === taskId);
+
+        if (task) {
+          task.completed = !task.completed;
+          saveTasks();
+          loadTasks();
+
+          if (task.completed) {
+            const celebrations = [
+              "כל הכבוד! משימה הושלמה 🎊",
+              "יש! עוד אחת מהרשימה 🎯",
+              "מצוין! המשך ככה 💫",
+              "אלוף! עוד משימה בוצעה ⭐",
+              "יפה מאוד! גאה בך 🏆",
             ];
-            months.forEach((month, index) => {
-                const option = document.createElement('option');
-                option.value = index + 1;
-                option.textContent = month;
-                if (index + 1 === currentMonth) option.selected = true;
-                monthSelect.appendChild(option);
-            });
+            showFeedback(
+              celebrations[Math.floor(Math.random() * celebrations.length)],
+            );
+          }
+        }
+      }
 
-            updateDaySelector();
-            
-            // Add event listeners
-            yearSelect.addEventListener('change', () => {
-                currentYear = parseInt(yearSelect.value);
-                updateDaySelector();
-                loadTasks();
-            });
+      function deleteTask(taskId) {
+        const dateKey = getDateKey();
+        tasks[dateKey] = tasks[dateKey].filter((t) => t.id !== taskId);
 
-            monthSelect.addEventListener('change', () => {
-                currentMonth = parseInt(monthSelect.value);
-                updateDaySelector();
-                loadTasks();
-            });
-
-            document.getElementById('daySelect').addEventListener('change', (e) => {
-                currentDay = parseInt(e.target.value);
-                loadTasks();
-            });
+        if (tasks[dateKey].length === 0) {
+          delete tasks[dateKey];
         }
 
-        function updateDaySelector() {
-            const daySelect = document.getElementById('daySelect');
-            daySelect.innerHTML = '';
-            
-            const daysInMonth = new Date(currentYear, currentMonth, 0).getDate();
-            
-            for (let i = 1; i <= daysInMonth; i++) {
-                const option = document.createElement('option');
-                option.value = i;
-                option.textContent = i;
-                if (i === currentDay && currentDay <= daysInMonth) {
-                    option.selected = true;
-                }
-                daySelect.appendChild(option);
-            }
+        saveTasks();
+        loadTasks();
+        showFeedback("המשימה נמחקה בהצלחה 👋", "#764ba2");
+      }
 
-            if (currentDay > daysInMonth) {
-                currentDay = daysInMonth;
-                daySelect.value = currentDay;
-            }
+      function loadTasks() {
+        const dateKey = getDateKey();
+        const tasksList = document.getElementById("tasksList");
+        const dayTasks = tasks[dateKey] || [];
 
-            updateCurrentDateDisplay();
-        }
-
-        function updateCurrentDateDisplay() {
-            const months = [
-                'ינואר', 'פברואר', 'מרץ', 'אפריל', 'מאי', 'יוני',
-                'יולי', 'אוגוסט', 'ספטמבר', 'אוקטובר', 'נובמבר', 'דצמבר'
-            ];
-            const days = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'];
-            
-            const date = new Date(currentYear, currentMonth - 1, currentDay);
-            const dayName = days[date.getDay()];
-            
-            document.getElementById('currentDateDisplay').textContent = 
-                `יום ${dayName}, ${currentDay} ב${months[currentMonth - 1]} ${currentYear}`;
-        }
-
-        function getDateKey() {
-            return `${currentYear}-${String(currentMonth).padStart(2, '0')}-${String(currentDay).padStart(2, '0')}`;
-        }
-
-        function addTask() {
-            const input = document.getElementById('taskInput');
-            const taskText = input.value.trim();
-
-            if (!taskText) {
-                showFeedback('אופס! כתוב משהו קודם 😊', '#ff6b6b');
-                return;
-            }
-
-            const dateKey = getDateKey();
-            if (!tasks[dateKey]) {
-                tasks[dateKey] = [];
-            }
-
-            const task = {
-                id: Date.now(),
-                text: taskText,
-                completed: false,
-                createdAt: new Date().toISOString()
-            };
-
-            tasks[dateKey].push(task);
-            saveTasks();
-            input.value = '';
-            loadTasks();
-
-            const encouragements = [
-                'כל הכבוד! משימה חדשה נוספה 🎉',
-                'מעולה! עוד צעד לקראת ההצלחה 🌟',
-                'יפה מאוד! המשך ככה 💪',
-                'אתה מדהים! המשימה נוספה ✨',
-                'נהדר! יום פרודוקטיבי מחכה לך 🚀'
-            ];
-            showFeedback(encouragements[Math.floor(Math.random() * encouragements.length)]);
-        }
-
-        function toggleTask(taskId) {
-            const dateKey = getDateKey();
-            const task = tasks[dateKey].find(t => t.id === taskId);
-            
-            if (task) {
-                task.completed = !task.completed;
-                saveTasks();
-                loadTasks();
-
-                if (task.completed) {
-                    const celebrations = [
-                        'כל הכבוד! משימה הושלמה 🎊',
-                        'יש! עוד אחת מהרשימה 🎯',
-                        'מצוין! המשך ככה 💫',
-                        'אלוף! עוד משימה בוצעה ⭐',
-                        'יפה מאוד! גאה בך 🏆'
-                    ];
-                    showFeedback(celebrations[Math.floor(Math.random() * celebrations.length)]);
-                }
-            }
-        }
-
-        function deleteTask(taskId) {
-            const dateKey = getDateKey();
-            tasks[dateKey] = tasks[dateKey].filter(t => t.id !== taskId);
-            
-            if (tasks[dateKey].length === 0) {
-                delete tasks[dateKey];
-            }
-            
-            saveTasks();
-            loadTasks();
-            showFeedback('המשימה נמחקה בהצלחה 👋', '#764ba2');
-        }
-
-        function loadTasks() {
-            const dateKey = getDateKey();
-            const tasksList = document.getElementById('tasksList');
-            const dayTasks = tasks[dateKey] || [];
-
-            if (dayTasks.length === 0) {
-                tasksList.innerHTML = `
+        if (dayTasks.length === 0) {
+          tasksList.innerHTML = `
                     <div class="empty-state">
                         <div class="empty-state-icon">📝</div>
                         <h3>אין משימות להיום</h3>
                         <p>הוסף משימה חדשה כדי להתחיל!</p>
                     </div>
                 `;
-            } else {
-                tasksList.innerHTML = dayTasks.map(task => `
-                    <div class="task-item ${task.completed ? 'completed' : ''}">
+        } else {
+          tasksList.innerHTML = dayTasks
+            .map(
+              (task) => `
+                    <div class="task-item ${task.completed ? "completed" : ""}">
                         <input 
                             type="checkbox" 
                             class="task-checkbox" 
-                            ${task.completed ? 'checked' : ''}
+                            ${task.completed ? "checked" : ""}
                             onchange="toggleTask(${task.id})"
                         >
                         <span class="task-text">${task.text}</span>
-                        <span class="task-time">${new Date(task.createdAt).toLocaleTimeString('he-IL', {hour: '2-digit', minute: '2-digit'})}</span>
+                        <span class="task-time">${new Date(task.createdAt).toLocaleTimeString("he-IL", { hour: "2-digit", minute: "2-digit" })}</span>
                         <button class="btn-delete" onclick="deleteTask(${task.id})">מחק</button>
                     </div>
-                `).join('');
-            }
-
-            updateStats();
+                `,
+            )
+            .join("");
         }
 
-        function updateStats() {
-            const dateKey = getDateKey();
-            const dayTasks = tasks[dateKey] || [];
-            const completed = dayTasks.filter(t => t.completed).length;
+        updateStats();
+      }
 
-            document.getElementById('totalTasks').textContent = dayTasks.length;
-            document.getElementById('completedTasks').textContent = completed;
+      function updateStats() {
+        const dateKey = getDateKey();
+        const dayTasks = tasks[dateKey] || [];
+        const completed = dayTasks.filter((t) => t.completed).length;
+
+        document.getElementById("totalTasks").textContent = dayTasks.length;
+        document.getElementById("completedTasks").textContent = completed;
+      }
+
+      function saveTasks() {
+        localStorage.setItem("tasks", JSON.stringify(tasks));
+      }
+
+      function showFeedback(message, color = "#11998e") {
+        const feedback = document.getElementById("feedback");
+
+        // Clear any existing timeout
+        if (feedbackTimeout) {
+          clearTimeout(feedbackTimeout);
         }
 
-        function saveTasks() {
-            localStorage.setItem('tasks', JSON.stringify(tasks));
-        }
+        // Remove show class first to reset animation
+        feedback.classList.remove("show");
 
-        function showFeedback(message, color = '#11998e') {
-            const feedback = document.getElementById('feedback');
-            
-            // Clear any existing timeout
-            if (feedbackTimeout) {
-                clearTimeout(feedbackTimeout);
-            }
-            
-            // Remove show class first to reset animation
-            feedback.classList.remove('show');
-            
-            // Update content and color
-            feedback.textContent = message;
-            feedback.style.background = `linear-gradient(135deg, ${color} 0%, #38ef7d 100%)`;
-            
-            // Use setTimeout to ensure the class removal is processed before adding it back
-            setTimeout(() => {
-                feedback.classList.add('show');
-                
-                // Set timeout to hide feedback
-                feedbackTimeout = setTimeout(() => {
-                    feedback.classList.remove('show');
-                }, 3000);
-            }, 10);
-        }
+        // Update content and color
+        feedback.textContent = message;
+        feedback.style.background = `linear-gradient(135deg, ${color} 0%, #38ef7d 100%)`;
 
-        // Initialize app
-        initializeDateSelectors();
-        loadTasks();
+        // Use setTimeout to ensure the class removal is processed before adding it back
+        setTimeout(() => {
+          feedback.classList.add("show");
+
+          // Set timeout to hide feedback
+          feedbackTimeout = setTimeout(() => {
+            feedback.classList.remove("show");
+          }, 3000);
+        }, 10);
+      }
+
+      // Initialize app
+      initializeDateSelectors();
+      loadTasks();
     </script>
-</body>
+  </body>
 </html>
