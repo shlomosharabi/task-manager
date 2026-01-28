@@ -1,5 +1,11 @@
 const CACHE_NAME = "task-manager-v1";
-const urlsToCache = ["./index.html", "./manifest.json"];
+const urlsToCache = [
+  "/task-manager/",
+  "/task-manager/index.html",
+  "/task-manager/manifest.json",
+  "/task-manager/icon-192.png",
+  "/task-manager/icon-512.png",
+];
 
 // Install event - cache resources
 self.addEventListener("install", (event) => {
