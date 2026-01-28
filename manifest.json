@@ -2,7 +2,7 @@
   "name": "מנהל המשימות שלי",
   "short_name": "משימות",
   "description": "מנהל משימות חכם ומעוצב",
-  "start_url": "/task-manager/index.html",
+  "start_url": "/",
   "scope": "/task-manager/",
   "display": "standalone",
   "background_color": "#667eea",
